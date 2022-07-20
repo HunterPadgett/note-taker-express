@@ -1,1 +1,12 @@
-[{"title":"Note One","text":"boom","id":"e494"},{"title":"Note Two","text":"are my ids working","id":"996c"},{"title":"Note Three","text":"they are working","id":"ff15"},{"title":"Note Four","text":"now how do i delete them","id":"f2b4"},{"title":"Note Five ","text":"ayayayaayayyyayayay","id":"850c"},{"title":"Note Six","text":"hmmmmm","id":"eb67"}]
+[
+    {
+        "title": "Hire Paulo",
+        "text": "good guy",
+        "id": "1c56"
+    },
+    {
+        "title": "Hire Teagrin",
+        "text": "good gal",
+        "id": "9cbf"
+    }
+]

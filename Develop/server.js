@@ -23,7 +23,7 @@ app.get('/notes' , (req, res) =>
 
 const writeToFile = (destination, content) =>
   fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
-    err ? console.error(err) : console.info(`\nData written to ${destination}`)
+    err ? console.log(err) : console.log(`\nyupyup ${destination}`)
   );
 
 const readAndAppend = (content, file) => {
@@ -76,14 +76,13 @@ app.delete('/api/notes/:id', (req, res) => {
     )
   });
 
-  
-  app.get('*', (req, res) =>
+app.get('*', (req, res) =>
   res.send(
-    `Make a GET request using Insomnia to <a href="http://localhost:${PORT}/api/terms">http://localhost:${PORT}/api/terms</a>`
+    `Go back to <a href="http://localhost:${PORT}">http://localhost:${PORT}</a>`
   )
 );
 
 app.listen(PORT, () =>
-  console.log(`App sending at http://localhost:${PORT} 🚀`)
+  console.log(`App sending at http://localhost:${PORT} 👾`)
 );
 
