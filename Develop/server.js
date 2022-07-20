@@ -3,7 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const { channel } = require('diagnostics_channel');
 
-const PORT = 3001;
+const uuid = require('./helpers/uuid');
+
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 
@@ -19,6 +21,23 @@ app.get('/notes' , (req, res) =>
   res.sendFile(path.join(__dirname, '/public/notes.html'))
 )
 
+const writeToFile = (destination, content) =>
+  fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
+    err ? console.error(err) : console.info(`\nData written to ${destination}`)
+  );
+
+const readAndAppend = (content, file) => {
+  fs.readFile(file, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      const parsedData = JSON.parse(data);
+      parsedData.push(content);
+      writeToFile(file, parsedData);
+    }
+  });
+};
+
 app.get('/api/notes' , (req, res) => {
   let notes = fs.readFileSync('./db/db.json')
   notes = JSON.parse(notes);
@@ -26,25 +45,38 @@ app.get('/api/notes' , (req, res) => {
 })
 
 app.post('/api/notes', (req, res) => {
-  // console.log(req.body)
-  let notes = fs.readFileSync('./db/db.json')
-  notes = JSON.parse(notes);
-  notes.push(req.body);
-  fs.writeFileSync('./db/db.json', JSON.stringify(notes));
-  notes = JSON.parse(notes);
-  res.json(notes);
+
+  const { title, text } = req.body;
+
+  if (req.body) {
+    const titleId = {
+      title,
+      text,
+      id: uuid(),
+    };
+
+    readAndAppend(titleId, './db/db.json');
+    res.json('random id applied');
+  } else {
+    res.error('whooooops id not applied')
+  }
 })
 
-app.delete('/api/notes/:title', (req, res) => {
-  
-  let notes = fs.readFileSync('./db/db.json')
-  notes = JSON.parse(notes);
-  res.json(notes)
-  console.log(notes)
-  console.log(req.params);
+app.delete('/api/notes/:id', (req, res) => {
+    let notes = fs.readFileSync('./db/db.json');
+    notes = JSON.parse(notes);
+    res.json(notes);
+    const { id } = req.params;
 
+    notes = notes.filter(note => note.id !== id)
+    console.log(notes)
+
+    fs.writeFile('./db/db.json', JSON.stringify(notes), (err) =>
+      err ? console.error(err) : console.info('new array wrote')
+    )
   });
 
+  
   app.get('*', (req, res) =>
   res.send(
     `Make a GET request using Insomnia to <a href="http://localhost:${PORT}/api/terms">http://localhost:${PORT}/api/terms</a>`
@@ -52,6 +84,6 @@ app.delete('/api/notes/:title', (req, res) => {
 );
 
 app.listen(PORT, () =>
-  console.log(`App sening at http://localhost:${PORT} 🚀`)
+  console.log(`App sending at http://localhost:${PORT} 🚀`)
 );
 
