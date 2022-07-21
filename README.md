@@ -27,9 +27,11 @@
   
   ## Installation
 
-  There are no installation intructions for this app! :)
+  Run ```npm i``` in the terminal if you plan on cloning the repo instead of using the Heroku link.
 
   ## Usage 
+
+  Run ```node server.js``` in the terminal if you plan on cloning the repo instead of using the Heroku link.
 
   ![image](https://user-images.githubusercontent.com/106113692/180083407-6fc0dc8a-a486-4b01-ba6e-d7caa3a0c773.png)
 
